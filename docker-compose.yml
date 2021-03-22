@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  mongo:
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+    image: mongo:3.6
+  app: 
+    image: node:10
+    working_dir: /home/node/app
+    user: node
+    environment: 
+      MONGO_URL: mongodb://mongo:27017/test
+    volumes:
+      - .:/home/node/app
+    ports: 
+      - 3000:3000
+    command: ./wait-for-it mongo:27017 -- node server.js
